@@ -19,7 +19,7 @@ use ComPHPPuebla\Fixtures\Database\Row;
 class ForeignKeyProcessor implements PreProcessor, PostProcessor
 {
     /** @var array */
-    protected $references;
+    protected array $references;
 
     public function __construct()
     {
@@ -51,7 +51,7 @@ class ForeignKeyProcessor implements PreProcessor, PostProcessor
         $this->addReference($row);
     }
 
-    public function addReference(Row $row)
+    public function addReference(Row $row): void
     {
         $this->references[$row->identifier()] = $row->id();
     }
@@ -59,7 +59,7 @@ class ForeignKeyProcessor implements PreProcessor, PostProcessor
     /**
      * @return mixed
      */
-    private function parseKeyIfNeeded($value)
+    private function parseKeyIfNeeded($value): mixed
     {
         if (!is_scalar($value)) return $value;
         if ($this->isAReference($value) && $this->referenceExistsFor($value)) {

@@ -7,7 +7,9 @@
 namespace ComPHPPuebla\Fixtures\Commands;
 
 use ComPHPPuebla\Fixtures\Fixture;
+use ComPHPPuebla\Fixtures\Generators\InvalidRange;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,7 +24,7 @@ class LoadFixtureCommand extends Command
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('dbal:fixture:load')
              ->setDescription('Loads a fixture in the configured database.')
@@ -41,13 +43,13 @@ HELP
     }
 
     /**
-     * @throws \InvalidArgumentException If the file cannot be found
-     * @throws \Symfony\Component\Console\Exception\LogicException If no helper
+     * @throws InvalidArgumentException If the file cannot be found
+     * @throws LogicException If no helper
      * set can be found
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException If
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException|InvalidRange If
      * the `db` helper is not present
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): void
     {
         $connection = new DBALConnection($this->getHelper('db')->getConnection());
         $filename = $this->getFilename($input->getArgument('file'));
@@ -59,7 +61,7 @@ HELP
     }
 
     /**
-     * @throws \InvalidArgumentException If file does not exist, or can't be read
+     * @throws InvalidArgumentException If file does not exist, or can't be read
      */
     private function getFilename(string $path): string
     {

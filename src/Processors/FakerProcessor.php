@@ -12,7 +12,7 @@ use Faker\Generator;
 class FakerProcessor implements PreProcessor
 {
     /** @var Generator */
-    private $generator;
+    private Generator $generator;
 
     public function __construct(Generator $generator)
     {

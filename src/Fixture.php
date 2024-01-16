@@ -9,6 +9,7 @@ namespace ComPHPPuebla\Fixtures;
 use ComPHPPuebla\Fixtures\Database\Connection;
 use ComPHPPuebla\Fixtures\Database\Row;
 use ComPHPPuebla\Fixtures\Generators\Generator;
+use ComPHPPuebla\Fixtures\Generators\InvalidRange;
 use ComPHPPuebla\Fixtures\Generators\RangeGenerator;
 use ComPHPPuebla\Fixtures\Loaders\Loader;
 use ComPHPPuebla\Fixtures\Loaders\YamlLoader;
@@ -21,22 +22,22 @@ use Faker\Factory;
 class Fixture
 {
     /** @var Loader */
-    private $loader;
+    private Loader $loader;
 
     /** @var Generator */
-    private $generator;
+    private Generator $generator;
 
     /** @var PreProcessor[] */
-    private $preProcessors;
+    private array $preProcessors;
 
     /** @var PostProcessor[] */
-    private $postProcessors;
+    private array $postProcessors;
 
     /** @var Connection */
-    private $connection;
+    private Connection $connection;
 
     /** @var array */
-    private $rows = [];
+    private array $rows = [];
 
     public function __construct(
         Connection $connection,
@@ -72,6 +73,7 @@ class Fixture
      *   d. It runs the post-processors for each row
      *      * The foreign key processor will save the generated database ID for the rows that might
      *        use it as reference, in the pre-insert face
+     * @throws InvalidRange
      */
     public function load(string $pathToFixturesFile): void
     {
@@ -82,6 +84,9 @@ class Fixture
         }
     }
 
+    /**
+     * @throws InvalidRange
+     */
     private function processTableRows(string $table, array $rows): void
     {
         $primaryKey = $this->connection->primaryKeyOf($table);

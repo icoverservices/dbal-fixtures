@@ -7,22 +7,23 @@
 namespace ComPHPPuebla\Fixtures\Processors;
 
 use Faker\Generator;
+use function count;
 
 class FormatterCall
 {
     private const FORMATTER_PATTERN = '/\$\{(\w+)(?:\(([^\)]+)\))?\}/i';
 
     /** @var string Original value */
-    private $definition;
+    private string $definition;
 
     /** @var string Original patter ${formatter(a1, a2, ... , an)} */
-    private $call;
+    private mixed $call;
 
     /** @var string */
-    private $formatter;
+    private mixed $formatter;
 
     /** @var string */
-    private $arguments;
+    private mixed $arguments;
 
     /**
      * It calls the formatter, on the given generator, with the arguments defined in this call object
@@ -37,7 +38,7 @@ class FormatterCall
     }
 
     /**
-     * A valid formatter definition matches the pattern `${formatter(arg_1..arg_n)}`
+     * A valid formatter definition matches the pattern `${formatter(arg_1.arg_n)}`
      */
     public static function matches(?string $value): bool
     {
@@ -60,7 +61,7 @@ class FormatterCall
         $callDefinition = [];
         preg_match(self::FORMATTER_PATTERN, $definition, $callDefinition);
 
-        if (\count($callDefinition) === 2) {
+        if (count($callDefinition) === 2) {
             $callDefinition[2] = '';
         }
 
@@ -84,8 +85,7 @@ class FormatterCall
         $trimmedArguments = array_map('trim', $arguments);
         return array_map(
             function ($argument) {
-                $argumentWithoutQuotes = str_replace(['\'', '"'], '', $argument);
-                return $argumentWithoutQuotes;
+                return str_replace(['\'', '"'], '', $argument);
             },
             $trimmedArguments
         );

@@ -11,13 +11,13 @@ class Range
     private const RANGE_PATTERN = '/\[(\d*)\.\.(\d+)\]/i';
 
     /** @var string */
-    private $definition;
+    private string $definition;
 
     /** @var int */
-    private $start;
+    private int $start;
 
     /** @var int */
-    private $end;
+    private int $end;
 
     public static function isRange(string $definition): bool
     {
@@ -25,7 +25,7 @@ class Range
     }
 
     /**
-     * Create a range from a definition with the form "[start..end]"
+     * Create a range from a definition with the form "[start.end]"
      *
      * @throws InvalidRange If the final value is not greater than the initial value
      */

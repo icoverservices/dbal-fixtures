@@ -7,11 +7,12 @@
 namespace ComPHPPuebla\Fixtures\Database;
 
 use Doctrine\DBAL\Connection as DbConnection;
+use Doctrine\DBAL\Exception;
 
 class DBALConnection implements Connection
 {
     /** @var DbConnection */
-    private $connection;
+    private DbConnection $connection;
 
     public function __construct(DbConnection $connection)
     {
@@ -21,30 +22,30 @@ class DBALConnection implements Connection
     /**
      * @param string $table
      * @param Row $row
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws Exception
      */
     public function insert(string $table, Row $row): void
     {
         $insert = Insert::into($table, $row);
 
-        $this->connection->executeUpdate($insert->toSQL($this->connection), $insert->parameters());
+        $this->connection->executeStatement($insert->toSQL($this->connection), $insert->parameters());
 
         try {
             $id = $this->connection->lastInsertId();
             $row->assignId($id);
-        } catch (\Exception $e) {};
+        } catch (\Exception) {}
     }
 
     /**
      * This method is needed in order to keep track of references to other rows in the fixtures
      *
      * @see \ComPHPPuebla\Fixtures\Fixture::processTableRows
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws Exception
      */
     public function primaryKeyOf(string $table): string
     {
-        $schema = $this->connection->getSchemaManager();
-        return $schema->listTableDetails($table)->getPrimaryKeyColumns()[0];
+        $schema = $this->connection->createSchemaManager();
+        return $schema->introspectTable($table)->getPrimaryKey()->getName();
     }
 
     /**
@@ -52,11 +53,10 @@ class DBALConnection implements Connection
      *
      * `$connection->registerPlatformType('enum', 'string');`
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws Exception
      */
     public function registerPlatformType(string $platformType, string $dbalType): void
     {
-        $schema = $this->connection->getSchemaManager();
-        $schema->getDatabasePlatform()->registerDoctrineTypeMapping($platformType, $dbalType);
+        $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping($platformType, $dbalType);
     }
 }

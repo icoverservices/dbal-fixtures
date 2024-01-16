@@ -20,7 +20,6 @@ class LoadFixtureCommandTest extends TestCase
 
     /**
      * @test
-     * @dataProvider databaseConnections
      */
     function it_loads_a_given_fixture_file_into_the_configured_database(ConnectionFactory $factory)
     {
@@ -34,6 +33,6 @@ class LoadFixtureCommandTest extends TestCase
         $statusCode = $command->run($input, $output);
 
         $this->assertEquals(0, $statusCode);
-        $this->assertRegExp('/fixture\-all\.yml/', $output->fetch());
+        $this->assertMatchesRegularExpression('/fixture\-all\.yml/', $output->fetch());
     }
 }

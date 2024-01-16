@@ -9,7 +9,7 @@ namespace ComPHPPuebla\Fixtures\Generators;
 class RangeGenerator implements Generator
 {
     /**
-     * If any of the rows contain a range definition (`[start..end]`) it will generate the amount
+     * If any of the rows contain a range definition (`[start.end]`) it will generate the amount
      * of rows defined by the range
      *
      * It will ignore rows without range definitions
