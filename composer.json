@@ -12,17 +12,21 @@
     ],
     "require": {
         "php": ">=8.2",
-        "doctrine/dbal": "^2.5 | ^3.3",
-        "symfony/console": "^4.0 | ^5.0 | ^6.0",
-        "symfony/yaml": "^4.0 | ^5.0 | ^6.0",
-        "fakerphp/faker": "^1.12"
+        "doctrine/dbal": "^4.0.x-dev",
+        "symfony/console": "^6.4",
+        "symfony/yaml": "^6.4",
+        "fakerphp/faker": "^1.23.x-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.6.9",
         "phpspec/prophecy": "^1.18"
     },
     "config": {
-        "bin-dir": "bin"
+        "platform": {
+            "php": "8.2"
+        },
+        "sort-packages": true,
+        "optimize-autoloader": true
     },
     "extra": {
         "branch-alias": {
@@ -44,13 +48,7 @@
         }
     },
     "scripts": {
-        "post-install-cmd": [
-            "chmod u+x bin/cli"
-        ],
-        "post-update-cmd": [
-            "chmod u+x bin/cli"
-        ],
-        "test": "./vendor/phpunit/phpunit/phpunit",
-        "test-with-stop": "./vendor/phpunit/phpunit/phpunit --stop-on-failure --stop-on-error"
+        "test": "./vendor/bin/phpunit",
+        "test-with-stop": "./vendor/bin/phpunit --stop-on-failure --stop-on-error"
     }
 }
