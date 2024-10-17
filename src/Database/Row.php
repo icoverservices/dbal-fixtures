@@ -6,6 +6,8 @@
  */
  namespace ComPHPPuebla\Fixtures\Database;
 
+use DateTime;
+
 class Row
 {
     /** @var string */
@@ -54,8 +56,21 @@ class Row
         return $this->identifier;
     }
 
+    public function processDynamicDatesIfNeeded($value)
+    {
+        if (str_contains($value, 'FIXTURE_DATE_NOW')) {
+            $intervalSpec = str_replace('FIXTURE_DATE_NOW', '', $value);
+            $date = new DateTime();
+            $date->modify(trim($intervalSpec));
+            $value = $date->format('Y-m-d H:i:s');
+        }
+
+        return $value;
+    }
+
     public function changeColumnValue(string $column, $value): void
     {
+        $value = $this->processDynamicDatesIfNeeded($value);
         $this->values[$column] = $value;
     }
 
