@@ -1,6 +1,5 @@
 {
     "name": "icoverservices/dbal-fixtures",
-    "version": "4.4.1",
     "description": "Fixtures management with Doctrine DBAL",
     "license": "MIT",
     "authors": [
